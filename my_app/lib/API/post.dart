@@ -9,7 +9,7 @@ Future<void> postAPI() async {
     },
     body: jsonEncode(<String, dynamic>{
       'username': 'deroui_y',
-      'password': 'Storme12312393'
+      'password': ''
     }),
   );
 
