@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/API/post.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:my_app/second.dart';
+
 
 void main() {
   runApp(const MyApp());
-  postAPI();
 }
 
 class MyApp extends StatelessWidget {
@@ -29,85 +27,81 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-  
-
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
-    }
-  }
+  var loginController = TextEditingController();
+  var passController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
-            ),
-          )
-        ],
-      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child : SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: loginController,
+                  decoration: InputDecoration(
+                      labelText: "Email", 
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.email)),
+                ),
+                SizedBox(height: 15,),
+                TextFormField(
+                  controller: passController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      labelText: "Password", 
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.password)),
+                ),
+                SizedBox(height: 45,
+                ),
+                OutlinedButton.icon(
+                    onPressed: () {
+                      login();
+                    }, 
+                    icon: Icon(Icons.login,
+                    size: 18,
+                    ), 
+                    label: Text("Login")),
+              ],
+              ))),
+              )
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
+  Future<void> login() async{
+    if(passController.text.isNotEmpty && loginController.text.isNotEmpty){
+      var response = await http.post(Uri.parse("https://auth.etna-alternance.net/identity"),
+          body: ({
+            'login':loginController.text, 
+            'password':passController.text
+          }));
+      if(response.statusCode==200){
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context)=>Second()));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Invalid")));
+    }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Retry")));
+    }
   }
 }
