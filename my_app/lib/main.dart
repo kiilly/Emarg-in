@@ -39,68 +39,89 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var loginController = TextEditingController();
   var passController = TextEditingController();
-  bool isPasswordHidden = true;
+  bool _isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SafeArea(
-          child: Center(
-              child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: TextFormField(
-              controller: loginController,
-              decoration: InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.email)),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: TextFormField(
-              controller: passController,
-              obscureText: isPasswordHidden,
-              decoration: InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordHidden
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPasswordHidden = !isPasswordHidden;
-                      });
-                    },
-                  )),
-            ),
-          ),
-          SizedBox(
-            height: 45,
-          ),
-          OutlinedButton.icon(
-              onPressed: () {
-                login();
-              },
-              icon: Icon(
-                Icons.login,
-                size: 18,
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 100,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.network(
+                  'https://ythwitum.sirv.com/Images/Emargin-removebg-preview.png',
+                  height: 100,
+                  scale: 2,
+                ),
               ),
-              label: Text("Login")),
-        ],
-      ))),
-    ));
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: TextFormField(
+                          controller: loginController,
+                          decoration: InputDecoration(
+                            labelText: "Login",
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.email),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: TextFormField(
+                          controller: passController,
+                          obscureText: _isPasswordHidden,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordHidden = !_isPasswordHidden;
+                                });
+                              },
+                              icon: _isPasswordHidden
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 45,
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          login();
+                        },
+                        icon: Icon(
+                          Icons.login,
+                          size: 18,
+                        ),
+                        label: Text("Login"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> login() async {
