@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/second.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -38,70 +37,93 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   var loginController = TextEditingController();
   var passController = TextEditingController();
-
+  bool isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child : SafeArea(
+        body: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SafeArea(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextFormField(
-                  controller: loginController,
-                  decoration: InputDecoration(
-                      labelText: "Email", 
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.email)),
-                ),
-                SizedBox(height: 15,),
-                TextFormField(
-                  controller: passController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      labelText: "Password", 
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.password)),
-                ),
-                SizedBox(height: 45,
-                ),
-                OutlinedButton.icon(
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: TextFormField(
+              controller: loginController,
+              decoration: InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.email)),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: TextFormField(
+              controller: passController,
+              obscureText: isPasswordHidden,
+              decoration: InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordHidden
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     onPressed: () {
-                      login();
-                    }, 
-                    icon: Icon(Icons.login,
-                    size: 18,
-                    ), 
-                    label: Text("Login")),
-              ],
-              ))),
-              )
-    );
+                      setState(() {
+                        isPasswordHidden = !isPasswordHidden;
+                      });
+                    },
+                  )),
+            ),
+          ),
+          SizedBox(
+            height: 45,
+          ),
+          OutlinedButton.icon(
+              onPressed: () {
+                login();
+              },
+              icon: Icon(
+                Icons.login,
+                size: 18,
+              ),
+              label: Text("Login")),
+        ],
+      ))),
+    ));
   }
 
-  Future<void> login() async{
-    if(passController.text.isNotEmpty && loginController.text.isNotEmpty){
-      var response = await http.post(Uri.parse("https://auth.etna-alternance.net/identity"),
+  Future<void> login() async {
+    if (passController.text.isNotEmpty && loginController.text.isNotEmpty) {
+      var response = await http.post(
+          Uri.parse("https://auth.etna-alternance.net/identity"),
           body: ({
-            'login':loginController.text, 
-            'password':passController.text
+            'login': loginController.text,
+            'password': passController.text
           }));
-      if(response.statusCode==200){
+      if (response.statusCode == 200) {
         Navigator.push(
-          context, MaterialPageRoute(builder: (context)=>Second()));
+            context, MaterialPageRoute(builder: (context) => Second()));
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Invalid")));
-    }
+      }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Retry")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Retry"),
+        ),
+      );
     }
   }
 }
