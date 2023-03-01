@@ -43,4 +43,6 @@ static const errorBorder = OutlineInputBorder(
     borderSide: BorderSide(
         color: Colors.red,
     ));  //BorderSide   //OutlineInputBorder
+    
+    static const primaryColor = Colors.greenAccent;
 }
