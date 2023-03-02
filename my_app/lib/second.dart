@@ -14,75 +14,69 @@ class _SecondState extends State<Second> {
   List<String> scannedCodes = [];
   QRViewController? controller;
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan de code QR'),
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 5,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 5,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  'Scan effectué : ${scannedCodes.isNotEmpty ? scannedCodes.last.substring(0, 8) : 'Scannez un code'}',
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: (scannedCodes.isNotEmpty)
-                      ? Text(
-                          'Scan effectué : ${scannedCodes.last}')
-                      : const Text('Scannez un code'),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ScannedCodesListPage(
-                        scannedCodes: scannedCodes,
-                      ),
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.list,
-                  size: 18,
-                ),
-                label: Text('Liste des codes'),
-              ),
-              Positioned(
-                bottom: 16.0,
-                left: 16.0,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListPage(),
-                      ),
-                    );
-                  },
-                  child: Icon(Icons.list),
-                ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+          ],
         ),
       ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScannedCodesListPage(
+                    scannedCodes: scannedCodes,
+                  ),
+                ),
+              );
+            },
+            child: Icon(Icons.check),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListPage(),
+                ),
+              );
+            },
+            child: Icon(Icons.close),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
