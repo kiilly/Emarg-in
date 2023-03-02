@@ -38,6 +38,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   http: ^0.13.5
   flutter_svg: ^2.0.2
+  sqflite: ^2.2.5
+  cloud_firestore: ^4.4.3
   
 
 

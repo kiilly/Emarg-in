@@ -124,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  
   Future<void> login() async {
     if (passController.text.isNotEmpty && loginController.text.isNotEmpty) {
       var response = await http.post(
@@ -135,6 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (response.statusCode == 200) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Second()));
+        print(response.headers['set-cookie']);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Invalid")));

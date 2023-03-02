@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/ListPage.dart';
 import 'package:my_app/ScannedCodesListPage.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -13,7 +14,7 @@ class _SecondState extends State<Second> {
   List<String> scannedCodes = [];
   QRViewController? controller;
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +37,7 @@ class _SecondState extends State<Second> {
                 child: Center(
                   child: (scannedCodes.isNotEmpty)
                       ? Text(
-                          'Données : ${scannedCodes.last}')
+                          'Scan effectué : ${scannedCodes.last}')
                       : const Text('Scannez un code'),
                 ),
               ),
@@ -59,13 +60,29 @@ class _SecondState extends State<Second> {
                   size: 18,
                 ),
                 label: Text('Liste des codes'),
-              )
+              ),
+              Positioned(
+                bottom: 16.0,
+                left: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListPage(),
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.list),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;

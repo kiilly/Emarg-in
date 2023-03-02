@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
 class ScannedCodesListPage extends StatelessWidget {
   final List<String> scannedCodes;
 
