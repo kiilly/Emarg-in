@@ -1,5 +1,3 @@
-# Groupe de benyou_k 999381
-
 **Nom du projet:**
 Emarg’in
 
