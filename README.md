@@ -1,5 +1,5 @@
-**Nom du projet:**
-Emarg’in
+#Nom du projet:#
+**Emarg’in**
 
 
 Description:
@@ -7,7 +7,10 @@ L'automatisation du processus de l’émargement
 
 Auteurs:
 
-Yanis DEROUICHEAbdelqodousse BOUSTANIKhalil BEN YOUSSEFAnass CHEMLLAL
+Yanis DEROUICHE 
+Abdelqodousse BOUSTANI
+Khalil BEN YOUSSEF
+Anass CHEMLLAL
 
 Technologies utilisés:
 
